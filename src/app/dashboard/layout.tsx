@@ -38,7 +38,7 @@ export default function ProjectsLayout({
                 />
                 <p
                   className={`text-[11px] mt-2 ${
-                    isActive ? "text-primary font-semibold" : "text-gray-500"
+                    isActive ? "text-primary font-bold" : "text-gray-500"
                   }`}
                 >
                   {items.name}

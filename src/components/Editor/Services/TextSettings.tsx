@@ -20,7 +20,7 @@ const TextSettings = () => {
     else if(type == 'SubHeading') {
       const textRef = new IText("Add SubHeading", {
         fontSize: 30,
-        fontWeight: "semi-bold",
+        fontWeight: "semibold",
         fontFamily: "Arial",
         fill: "black",
         left: 100,
@@ -32,7 +32,7 @@ const TextSettings = () => {
     else if(type == 'Para') {
       const textRef = new IText("Add Para", {
         fontSize: 30,
-        fontWeight: "Medium",
+        fontWeight: "medium",
         fontFamily: "Arial",
         fill: "black",
         left: 100,
@@ -56,13 +56,13 @@ const TextSettings = () => {
           Add Heading
         </h2>
         <h2
-          className="font-bold text-lg p-3 bg-light-gray rounded-md cursor-pointer"
+          className="font-semibold text-lg p-3 bg-light-gray rounded-md cursor-pointer"
           onClick={() => onAddTextClick("SubHeading")}
         >
           Add SubHeading
         </h2>
         <h2
-          className="font-bold text-md p-3 bg-light-gray rounded-md cursor-pointer"
+          className="font-medium text-md p-3 bg-light-gray rounded-md cursor-pointer"
           onClick={() => onAddTextClick("Para")}
         >
           Paragraph
