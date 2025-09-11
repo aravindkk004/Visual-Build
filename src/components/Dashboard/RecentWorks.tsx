@@ -20,10 +20,8 @@ const RecentWorks = () => {
     const fetchProjects = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get("/api/get-projects");
+        const res = await axios.get("/api/projects/get-projects");
         const fetchedProjects: Project[] = res.data.projects || [];
-
-        // Sort by createdAt descending (most recent first)
         fetchedProjects.sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
@@ -78,7 +76,7 @@ const RecentWorks = () => {
               </p>
               <button
                 className="mt-3 px-3 py-1 bg-[#4845d2] hover:bg-[#3a37b3] cursor-pointer rounded-md text-white text-sm transition"
-                onClick={() => router.push("./editor")}
+                onClick={() => router.push(`/editor/${project._id}`)}
               >
                 Open
               </button>

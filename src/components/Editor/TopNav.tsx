@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Download, Monitor, Save, Smartphone } from "lucide-react";
 import React from "react";
 
@@ -8,7 +8,6 @@ interface TopNavEditorProps {
 }
 
 const TopNav: React.FC<TopNavEditorProps> = ({ view, handleChangeView }) => {
-
   return (
     <nav className="bg-gradient-to-r from-[#00c4cc] to-[#7d2ae8] flex items-center justify-between px-6 py-3">
       <div className="text-white font-bold text-lg w-[33%]">VisualBuild</div>

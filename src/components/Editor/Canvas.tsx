@@ -43,50 +43,24 @@ const Canvas: React.FC<CanvasProps> = ({ view }) => {
     };
   }, [view]);
 
-  useEffect(()=> {
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if(event.key=='Delete'){
-        if(canvasEditor){
+      if (event.key == "Delete") {
+        if (canvasEditor) {
           const activeObject = canvasEditor.getActiveObject();
-          if(activeObject){
+          if (activeObject) {
             canvasEditor.remove(activeObject);
             canvasEditor.renderAll();
           }
         }
       }
-    }
-    document.addEventListener('keydown', handleKeyDown);
+    };
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [canvasEditor])
-
-  // useEffect(() => {
-  //   if (!canvasRef.current) return;
-  //   const initCanvas = new fabric.Canvas(canvasRef.current, {
-  //     backgroundColor: "#fff",
-  //   });
-
-  //   const width = view === "desktop" ? 1280 : 420;
-  //   const height = view === "desktop" ? 720 : 740;
-
-  //   const scaleFactor = window.devicePixelRatio || 1;
-  //   initCanvas.set({
-  //     width: width * scaleFactor,
-  //     height: height* scaleFactor,
-  //     zoom: 1 / scaleFactor
-  //   })
-
-  //   initCanvas.renderAll();
-  //   setCanvas(initCanvas);
-  //   setCanvasEditor(initCanvas);
-
-  //   return () => {
-  //     initCanvas.dispose();
-  //   }
-  // }, [view]);
-
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [canvasEditor]);
   return (
     <div className="w-full flex items-center justify-center overflow-y-auto">
       <canvas ref={canvasRef} />
