@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -10,8 +9,13 @@ import {
   MdFormatUnderlined,
   MdStrikethroughS,
 } from "react-icons/md";
+import { useEditorContext } from "@/context/EditorContext";
+import * as fabric from "fabric";
 
 const TextEditorPanel = () => {
+  const { selectedObject } = useEditorContext();
+  const textbox = selectedObject as fabric.Textbox | null;
+
   const [content, setContent] = useState("Sample Text");
   const [fontSize, setFontSize] = useState(20);
   const [fontSizeUnit, setFontSizeUnit] = useState("px");
@@ -48,9 +52,35 @@ const TextEditorPanel = () => {
     "none" | "uppercase" | "lowercase" | "capitalize"
   >("none");
 
+  useEffect(() => {
+    console.log("Text box is:", textbox);
+    console.log("selected object from editorpanel", selectedObject);
+    if (!textbox) return;
+    setContent(textbox.text || "Sample Text");
+    setFontSize(textbox.fontSize || 20);
+    setFontFamily(textbox.fontFamily || "Arial");
+    setFontWeight(textbox.fontWeight?.toString() || "400");
+    setColor((textbox.fill as string) || "#000000");
+    setTextAlign((textbox.textAlign as "left" | "center" | "right") || "left");
+    setLineHeight(textbox.lineHeight || 1.5);
+    setLetterSpacing(textbox.charSpacing ? textbox.charSpacing / 1000 : 0);
+    setOpacity(textbox.opacity ?? 1);
+    setIsBold((textbox.fontWeight as string) === "700");
+    setIsItalic(textbox.fontStyle === "italic");
+    setIsUnderline(!!textbox.underline);
+    setIsStrike(!!textbox.linethrough);
+    console.log("textbox after", textbox);
+  }, [textbox]);
+
+  const updateTextbox = (changes: Partial<fabric.Textbox>) => {
+    if (!textbox) return;
+    textbox.set({ ...changes });
+    textbox.canvas?.renderAll();
+  };
+
   const resetAll = () => {
     setContent("Sample Text");
-    setFontSize(30);
+    setFontSize(20);
     setFontSizeUnit("px");
     setTextAlign("left");
     setFontFamily("Arial");
@@ -72,6 +102,24 @@ const TextEditorPanel = () => {
     setIsUnderline(false);
     setIsStrike(false);
     setTextTransform("none");
+
+    if (textbox) {
+      textbox.set({
+        text: "Sample Text",
+        fontSize: 20,
+        fontFamily: "Arial",
+        fontWeight: "400",
+        fill: "#000000",
+        opacity: 1,
+        lineHeight: 1.5,
+        charSpacing: 0,
+        underline: false,
+        linethrough: false,
+        fontStyle: "normal",
+        textAlign: "left",
+      });
+      textbox.canvas?.renderAll();
+    }
   };
 
   return (
@@ -83,7 +131,10 @@ const TextEditorPanel = () => {
         <input
           type="text"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => {
+            setContent(e.target.value);
+            updateTextbox({ text: e.target.value });
+          }}
           className="bg-light-gray rounded-md p-2 outline-none w-[60%] text-[13px]"
         />
       </div>
@@ -94,7 +145,11 @@ const TextEditorPanel = () => {
           <input
             type="number"
             value={fontSize}
-            onChange={(e) => setFontSize(Number(e.target.value))}
+            onChange={(e) => {
+              const size = Number(e.target.value);
+              setFontSize(size);
+              updateTextbox({ fontSize: size });
+            }}
             className="bg-light-gray rounded-md p-2 outline-none w-[50%] text-[13px]"
           />
           <select
@@ -113,7 +168,10 @@ const TextEditorPanel = () => {
         <p className="text-[13px]">Font Family</p>
         <select
           value={fontFamily}
-          onChange={(e) => setFontFamily(e.target.value)}
+          onChange={(e) => {
+            setFontFamily(e.target.value);
+            updateTextbox({ fontFamily: e.target.value });
+          }}
           className="bg-light-gray rounded-md p-2 outline-none w-[60%] text-[13px]"
         >
           <option value="Arial">Arial</option>
@@ -129,7 +187,10 @@ const TextEditorPanel = () => {
         <p className="text-[13px]">Font Weight</p>
         <select
           value={fontWeight}
-          onChange={(e) => setFontWeight(e.target.value)}
+          onChange={(e) => {
+            setFontWeight(e.target.value);
+            updateTextbox(e.target.value);
+          }}
           className="bg-light-gray rounded-md p-2 outline-none w-[60%] text-[13px]"
         >
           <option value="100">Thin</option>
@@ -149,7 +210,10 @@ const TextEditorPanel = () => {
         <input
           type="color"
           value={color}
-          onChange={(e) => setColor(e.target.value)}
+          onChange={(e) => {
+            setColor(e.target.value);
+            updateTextbox(e.target.value);
+          }}
           className="w-[60%] h-8 rounded-md border-none outline-none text-[13px]"
         />
       </div>
